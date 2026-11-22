@@ -5,7 +5,7 @@ Jogo de palavras cruzadas no navegador para treinar os termos de Arquitetura Com
 ## Como jogar
 
 1. Passe o mouse sobre as letras de uma palavra para ver a dica.
-2. Digite as letras direto nas casas de cada palavra.
+2. Clique em uma casa e digite a palavra: o cursor avança sozinho para a próxima casa. Backspace volta e apaga, as setas movem pelo tabuleiro e, em uma casa que cruza duas palavras, clicar de novo (ou usar as setas) alterna entre horizontal e vertical.
 3. Clique em **Conferir**: as palavras certas ficam verdes, as erradas ficam vermelhas, e o contador mostra quantas você acertou.
 4. Clique em **Reiniciar** para limpar o tabuleiro e jogar de novo.
 5. Ao acertar as 12 palavras, aparece uma mensagem de parabéns.

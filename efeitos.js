@@ -138,3 +138,142 @@ const reiniciar = () => {
 botaoConferir.addEventListener('click', conferir);
 botaoReiniciar.addEventListener('click', reiniciar);
 tabuleiro.addEventListener('input', limparResultado);
+
+/* ---------- Digitação fluida: o cursor avança sozinho pela palavra ---------- */
+
+const colunas = getComputedStyle(tabuleiro).gridTemplateColumns.split(' ').length;
+let direcao = 'h'; // 'h' = horizontal, 'v' = vertical
+
+const outraDirecao = () => (direcao === 'h' ? 'v' : 'h');
+
+// Se a casa não pertence a uma palavra na direção atual, troca para a outra.
+const ajustarDirecao = (celula) => {
+  if (!celula.dataset[direcao]) direcao = outraDirecao();
+};
+
+const casasDaPalavra = (celula) => {
+  const nome = celula.dataset[direcao];
+  if (!nome) return [];
+  return [...tabuleiro.querySelectorAll(`[data-${direcao}="${nome}"] input`)];
+};
+
+const marcarPalavraAtiva = (celula) => {
+  for (const c of tabuleiro.querySelectorAll('.palavraAtiva')) c.classList.remove('palavraAtiva');
+  if (!celula) return;
+  for (const campo of casasDaPalavra(celula)) campo.closest('.celula').classList.add('palavraAtiva');
+};
+
+// Move o foco `passo` casas dentro da palavra atual (+1 avança, -1 volta).
+const vizinhaNaPalavra = (campo, passo) => {
+  const lista = casasDaPalavra(campo.closest('.celula'));
+  return lista[lista.indexOf(campo) + passo] || null;
+};
+
+// Move o foco para a casa vizinha no tabuleiro (usado pelas setas).
+const vizinhaNoTabuleiro = (campo, deltaLinha, deltaColuna) => {
+  const filhos = [...tabuleiro.children];
+  const indice = filhos.indexOf(campo.closest('.celula'));
+  const linha = Math.floor(indice / colunas) + deltaLinha;
+  const coluna = (indice % colunas) + deltaColuna;
+  if (coluna < 0 || coluna >= colunas || linha < 0) return null;
+  const alvo = filhos[linha * colunas + coluna];
+  return alvo && alvo.classList.contains('celula') ? alvo.querySelector('input') : null;
+};
+
+const processarLetra = (campo) => {
+  const letra = [...campo.value].find((c) => /\p{L}/u.test(c)) || '';
+  campo.value = letra;
+  if (!letra) return;
+  const proxima = vizinhaNaPalavra(campo, 1);
+  if (proxima) proxima.focus();
+};
+
+tabuleiro.addEventListener('focusin', (evento) => {
+  const campo = evento.target;
+  if (!campo.matches('input')) return;
+  const celula = campo.closest('.celula');
+  ajustarDirecao(celula);
+  marcarPalavraAtiva(celula);
+  campo.select(); // a próxima letra digitada substitui a atual
+});
+
+tabuleiro.addEventListener('focusout', (evento) => {
+  if (!tabuleiro.contains(evento.relatedTarget)) marcarPalavraAtiva(null);
+});
+
+// Clicar de novo na casa já selecionada alterna entre horizontal e vertical.
+tabuleiro.addEventListener('mousedown', (evento) => {
+  const campo = evento.target;
+  if (!campo.matches('input') || campo !== document.activeElement) return;
+  const celula = campo.closest('.celula');
+  if (celula.dataset.h && celula.dataset.v) {
+    direcao = outraDirecao();
+    marcarPalavraAtiva(celula);
+  }
+});
+
+// O navegador coloca o cursor ao soltar o mouse; selecionamos de novo para sobrescrever.
+tabuleiro.addEventListener('click', (evento) => {
+  if (evento.target.matches('input')) evento.target.select();
+});
+
+// Digitação normal: tratamos antes de o navegador inserir o texto. Assim a letra
+// avança mesmo quando é igual à que já estava na casa (o navegador não dispararia
+// 'input' nesse caso) e o limite de 1 caractere nunca bloqueia a tecla.
+tabuleiro.addEventListener('beforeinput', (evento) => {
+  const campo = evento.target;
+  if (!campo.matches('input') || evento.inputType !== 'insertText') return;
+  evento.preventDefault();
+  const letra = [...(evento.data || '')].find((c) => /\p{L}/u.test(c));
+  if (!letra) return;
+  campo.value = letra;
+  limparResultado();
+  const proxima = vizinhaNaPalavra(campo, 1);
+  if (proxima) proxima.focus();
+  else campo.select();
+});
+
+// Colar e teclados com composição (alguns celulares) chegam por aqui.
+tabuleiro.addEventListener('input', (evento) => {
+  if (evento.target.matches('input') && !evento.isComposing) processarLetra(evento.target);
+});
+tabuleiro.addEventListener('compositionend', (evento) => {
+  if (evento.target.matches('input')) processarLetra(evento.target);
+});
+
+tabuleiro.addEventListener('keydown', (evento) => {
+  const campo = evento.target;
+  if (!campo.matches('input') || evento.ctrlKey || evento.metaKey || evento.altKey) return;
+
+  if (evento.key === 'Backspace' && campo.value === '') {
+    const anterior = vizinhaNaPalavra(campo, -1);
+    evento.preventDefault();
+    if (anterior) {
+      anterior.value = '';
+      limparResultado();
+      anterior.focus();
+    }
+    return;
+  }
+
+  const setas = {
+    ArrowLeft: ['h', 0, -1],
+    ArrowRight: ['h', 0, 1],
+    ArrowUp: ['v', -1, 0],
+    ArrowDown: ['v', 1, 0],
+  };
+  if (setas[evento.key]) {
+    const [eixo, dLinha, dColuna] = setas[evento.key];
+    evento.preventDefault();
+    direcao = eixo;
+    const alvo = vizinhaNoTabuleiro(campo, dLinha, dColuna);
+    if (alvo) alvo.focus();
+    else marcarPalavraAtiva(campo.closest('.celula'));
+  }
+});
+
+for (const campo of tabuleiro.querySelectorAll('input')) {
+  campo.setAttribute('autocapitalize', 'characters');
+  campo.setAttribute('autocorrect', 'off');
+  campo.setAttribute('spellcheck', 'false');
+}

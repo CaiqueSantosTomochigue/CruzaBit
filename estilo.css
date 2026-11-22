@@ -201,3 +201,8 @@ body {
 .parabens p { font-size: 16px; line-height: 1.5; }
 
 @keyframes celebrar { from { opacity: 0; transform: scale(0.6) rotate(-4deg); } }
+
+/* Palavra em que o jogador está digitando agora */
+.celula.palavraAtiva:not(.certa):not(.errada) { background-color: #FFF08A; }
+.celula.palavraAtiva:not(.certa):not(.errada) input { color: var(--azulNoite); }
+.celula.palavraAtiva:not(.certa):not(.errada)[data-n]::before { color: var(--azulNoite); }
