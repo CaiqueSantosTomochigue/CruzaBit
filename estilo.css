@@ -159,3 +159,45 @@ body {
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+:root { --verde: #1E9E5A; --verdeClaro: #8CF5B8; --vermelhoEscuro: #8E1A16; }
+
+.celula.certa { background-color: var(--verde); border-color: var(--verdeClaro); }
+.celula.errada { background-color: var(--vermelhoEscuro); border-color: var(--vermelhoLuta); }
+.celula.certa.destaque, .celula.errada.destaque { outline: 3px solid var(--amareloClaro); }
+.celula.certa input, .celula.errada input { color: var(--branco); }
+.celula.certa[data-n]::before, .celula.errada[data-n]::before { color: var(--branco); }
+
+.painel { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.contador { font-size: 18px; font-weight: 600; }
+.contador strong { font: 30px "Russo One", sans-serif; color: var(--amareloClaro); }
+.botoes { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.botao {
+  padding: 12px 22px;
+  border: 2px solid var(--brancoGelo);
+  border-radius: 10px;
+  background-color: var(--amareloClaro);
+  box-shadow: 4px 4px var(--azulClaro);
+  color: var(--azulNoite);
+  font: 12px "Press Start 2P", monospace;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.botao:hover { transform: scale(1.08); }
+.botao:active { transform: translate(2px, 2px); box-shadow: 2px 2px var(--azulClaro); }
+.botao:focus-visible { outline: 3px solid var(--vermelhoLuta); outline-offset: 3px; }
+.botaoSecundario { background-color: var(--azulTransparente); border-color: var(--amareloClaro); color: var(--branco); }
+
+.parabens {
+  max-width: 520px;
+  padding: 24px 28px;
+  text-align: center;
+  background-color: var(--azulNoite);
+  border: 3px solid var(--amareloClaro);
+  border-radius: 20px;
+  box-shadow: 10px 10px var(--azulEscuro), 0 0 40px #FFD70055;
+  animation: celebrar 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+.parabens h2 { margin-bottom: 10px; font: 22px "Press Start 2P", monospace; color: var(--amareloClaro); line-height: 1.4; }
+.parabens p { font-size: 16px; line-height: 1.5; }
+
+@keyframes celebrar { from { opacity: 0; transform: scale(0.6) rotate(-4deg); } }

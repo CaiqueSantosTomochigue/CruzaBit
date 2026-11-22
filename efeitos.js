@@ -79,3 +79,62 @@ tabuleiro.addEventListener('mouseleave', esconderDica);
 tabuleiro.addEventListener('focusout', (evento) => {
   if (!tabuleiro.contains(evento.relatedTarget)) esconderDica();
 });
+
+const botaoConferir = document.getElementById('botaoConferir');
+const botaoReiniciar = document.getElementById('botaoReiniciar');
+const acertos = document.getElementById('acertos');
+const parabens = document.getElementById('parabens');
+const palavras = [...document.querySelectorAll('#listaDicas [data-palavra]')].map((item) => item.dataset.palavra);
+
+const limparResultado = () => {
+  for (const celula of tabuleiro.querySelectorAll('.certa, .errada')) {
+    celula.classList.remove('certa', 'errada');
+  }
+  parabens.hidden = true;
+  acertos.textContent = '–';
+};
+
+const conferir = () => {
+  limparResultado();
+  let total = 0;
+
+  for (const palavra of palavras) {
+    const celulas = tabuleiro.querySelectorAll(`[data-h="${palavra}"], [data-v="${palavra}"]`);
+    let digitado = '';
+    for (const celula of celulas) {
+      digitado += celula.querySelector('input').value.toUpperCase();
+    }
+
+    if (digitado === palavra.toUpperCase()) {
+      total++;
+      for (const celula of celulas) {
+        celula.classList.remove('errada');
+        celula.classList.add('certa');
+      }
+    } else {
+      for (const celula of celulas) {
+        const preenchida = celula.querySelector('input').value !== '';
+        if (preenchida && !celula.classList.contains('certa')) celula.classList.add('errada');
+      }
+    }
+  }
+
+  acertos.textContent = total;
+  if (total === palavras.length) {
+    parabens.hidden = false;
+    parabens.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+};
+
+const reiniciar = () => {
+  for (const campo of tabuleiro.querySelectorAll('input')) {
+    campo.value = '';
+  }
+  limparResultado();
+  acertos.textContent = '0';
+  esconderDica();
+};
+
+botaoConferir.addEventListener('click', conferir);
+botaoReiniciar.addEventListener('click', reiniciar);
+tabuleiro.addEventListener('input', limparResultado);

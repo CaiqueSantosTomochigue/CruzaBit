@@ -35,6 +35,18 @@
     
       <div class="dica" id="dica" role="status" aria-live="polite"></div>
     </div>
+    <div class="painel">
+      <p class="contador" role="status"><strong id="acertos">0</strong> de 12 palavras</p>
+      <div class="botoes">
+        <button type="button" id="botaoConferir" class="botao">Conferir</button>
+        <button type="button" id="botaoReiniciar" class="botao botaoSecundario">Reiniciar</button>
+      </div>
+    </div>
+
+    <div class="parabens" id="parabens" role="status" hidden>
+      <h2>Parabéns!</h2>
+      <p>Você acertou as 12 palavras e completou a cruzadinha.</p>
+    </div>
   <section id="listaDicas" hidden>
     <ol data-direcao="Horizontal">
       <li value="2" data-palavra="microcontrolador"></li>
