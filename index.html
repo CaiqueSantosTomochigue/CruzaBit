@@ -18,6 +18,7 @@
     <div class="titulo">
       <h1>Cruzadinha de Arquitetura Computacional</h1>
       <span class="barraTitulo"></span>
+      <p class="instrucao">Passe o mouse sobre as letras de uma palavra para ver a dica.</p>
     </div>
     <div class="areaTabuleiro">
       <div class="tabuleiro" id="tabuleiro">
@@ -32,6 +33,7 @@
       <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="celula" data-v="ula"><input maxlength="1" autocomplete="off" aria-label="Linha 9, coluna 10"></span><i></i><i></i><i></i><i></i><i></i><span class="celula" data-v="addressbus"><input maxlength="1" autocomplete="off" aria-label="Linha 9, coluna 16"></span><i></i><i></i>
       <i></i><i></i><i></i><span class="celula" data-n="11" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 4"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 5"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 6"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 7"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 8"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 9"></span><span class="celula" data-h="memoriademassa" data-v="ula"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 10"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 11"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 12"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 13"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 14"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 15"></span><span class="celula" data-h="memoriademassa" data-v="addressbus"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 16"></span><span class="celula" data-h="memoriademassa"><input maxlength="1" autocomplete="off" aria-label="Linha 10, coluna 17"></span><i></i>
     
+      <div class="dica" id="dica" role="status" aria-live="polite"></div>
     </div>
   <section id="listaDicas" hidden>
     <ol data-direcao="Horizontal">
@@ -56,5 +58,6 @@
   <footer class="rodape">
     <p>Arquitetura Computacional, Sprint 3</p>
   </footer>
+  <script src="efeitos.js"></script>
 </body>
 </html>
